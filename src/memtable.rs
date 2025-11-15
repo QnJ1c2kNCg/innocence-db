@@ -6,24 +6,25 @@ use crate::{
 };
 
 /// TODO
-pub(crate) trait MemTable {
+pub(crate) trait Memtable {
     /// Inserts a key-value pair into the memtable.
-    fn insert(&self, key: Key, value: Value) -> Result<(), MemTableError>;
+    fn insert(&self, key: Key, value: Value) -> Result<(), MemtableError>;
 
     /// Retrieves the value from the memtable associated with the given key.
-    fn get(&self, key: &Key) -> Result<Value, MemTableError>;
+    fn get(&self, key: &Key) -> Result<Value, MemtableError>;
 }
 
 /// Represents errors that can occur when interacting with a memtable.
-pub(crate) enum MemTableError {
+#[derive(Debug)]
+pub(crate) enum MemtableError {
     /// The requested key was not found in the memtable.
     KeyNotFound,
 }
 
-impl From<MemTableError> for DbError {
-    fn from(error: MemTableError) -> Self {
+impl From<MemtableError> for DbError {
+    fn from(error: MemtableError) -> Self {
         match error {
-            MemTableError::KeyNotFound => DbError::KeyNotFound,
+            MemtableError::KeyNotFound => DbError::KeyNotFound,
         }
     }
 }

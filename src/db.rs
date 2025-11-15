@@ -1,11 +1,11 @@
 use crate::{
-    memtable::{MemTable, btree_map::BTreeMapMemTable},
+    memtable::{Memtable, btree_map::BTreeMapMemtable},
     types::{Key, Value},
 };
 
 /// The innocence database.
 pub struct Db {
-    memtable: Box<dyn MemTable>,
+    memtable: Box<dyn Memtable>,
 }
 
 /// All publicly exposed errors.
@@ -32,7 +32,7 @@ impl Db {
 
 /// Builder for the [`Db`].
 pub struct DbBuilder {
-    memtable: Option<Box<dyn MemTable>>,
+    memtable: Option<Box<dyn Memtable>>,
 }
 
 impl DbBuilder {
@@ -42,7 +42,7 @@ impl DbBuilder {
     }
 
     /// Sets the memtable for the database.
-    pub fn memtable(mut self, memtable: Box<dyn MemTable>) -> Self {
+    pub fn memtable(mut self, memtable: Box<dyn Memtable>) -> Self {
         self.memtable = Some(memtable);
         self
     }
@@ -58,7 +58,7 @@ impl DbBuilder {
     /// Builds the database for testing purposes.
     // TODO: Should probably clean this up.
     pub fn build_for_tests(self) -> Result<Db, DbError> {
-        let memtable = Box::new(BTreeMapMemTable::default());
+        let memtable = Box::new(BTreeMapMemtable::default());
         self.memtable(memtable).build()
     }
 }
